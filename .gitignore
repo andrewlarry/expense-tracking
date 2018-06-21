@@ -5,6 +5,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Playground
+server/Playground
+
 # Runtime data
 pids
 *.pid
