@@ -4,16 +4,35 @@ const request = require('supertest');
 const { app } = require('../server');
 const { Expense } = require('../model');
 
+const expenses = [
+  {
+    description: 'Route testing 1.',
+    category: 'Testing',
+    amount: 500,
+    month: 'Aug',
+    year: 2018
+  },
+  {
+    description: 'Route testing 2.',
+    category: 'Fishing',
+    amount: 1000,
+    month: 'Sept',
+    year: 2018
+  },
+];
+
 beforeEach((done) => {
-  Expense.remove({}).then(() => done());
+  Expense.remove({}).then(() => {
+    return Expense.insertMany(expenses);
+  }).then(() => done());
 });
 
 describe('POST /expenses', () => {
   it('should create a new expense', (done) => {
     const expense = {
-      description: 'Testing this route.',
+      description: 'POST /expenses',
       category: 'Fishing',
-      amount: 400,
+      amount: 999,
       month: 'Aug',
       year: 2018
     };
@@ -33,11 +52,10 @@ describe('POST /expenses', () => {
         if (err) {
           return done(err);
         }
-        Expense.find().then((expenses) => {
+        Expense.find({ amount: expense.amount }).then((expenses) => {
           expect(expenses.length).toBe(1);
           expect(expenses[0].description).toBe(expense.description);
           expect(expenses[0].category).toBe(expense.category);
-          expect(expenses[0].amount).toBe(expense.amount);
           expect(expenses[0].month).toBe(expense.month);
           expect(expenses[0].year).toBe(expense.year);
           done();
@@ -45,7 +63,7 @@ describe('POST /expenses', () => {
       });
   });
 
-  it('should not create a expense with invalid body data', (done) => {
+  it('should not create an expense with invalid body data', (done) => {
       request(app)
         .post('/expenses')
         .send({})
@@ -55,9 +73,21 @@ describe('POST /expenses', () => {
             return done(err);
           }
           Expense.find().then((expenses) => {
-            expect(expenses.length).toBe(0);
+            expect(expenses.length).toBe(2);
             done();
           }).catch(err => done(err));
         });
     });
+});
+
+describe('GET /expenses', () => {
+  it('should get all expenses', (done) => {
+    request(app)
+      .get('/expenses')
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.expenses.length).toBe(2);
+      })
+      .end(done);
+  });
 });
