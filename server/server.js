@@ -23,7 +23,13 @@ app.post('/expenses', (req, res) => {
   .catch(err => res.status(400).send(err));
 });
 
-
+app.get('/expenses', (req, res) => {
+  Expense.find().then((expenses) => {
+    res.send({ expenses });
+  }, (err) => {
+    res.status(400).send(err);
+  });
+});
 
 app.listen(3000, () => {
   console.log('Started on port 3000');
