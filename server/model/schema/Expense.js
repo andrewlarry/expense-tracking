@@ -7,13 +7,13 @@ const months = [
 
 const expenseSchema = new Schema({
   description: String,
+  category: {
+    type: String,
+    required: true,
+  },
   amount: {
     type: Number,
     min: 0,
-    required: true,
-  },
-  category: {
-    type: String,
     required: true,
   },
   month: {

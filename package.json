@@ -6,7 +6,11 @@
   "scripts": {
     "build:dev": "webpack --env dev --progress",
     "build:prod": "webpack --env prod --progress",
-    "dev": "webpack-dev-server --open --inline --hot --no-info --env dev"
+    "dev": "webpack-dev-server --open --inline --hot --no-info --env dev",
+    "test": "mocha server/**/*.test.js",
+    "test-watch": "nodemon --exec 'npm test'",
+    "start": "node server/server.js",
+    "start:dev": "nodemon server/server.js"
   },
   "author": "Andrew Fuselier",
   "license": "MIT",
@@ -30,11 +34,14 @@
     "babel-preset-stage-2": "6.24.1",
     "clean-webpack-plugin": "0.1.19",
     "css-loader": "0.28.11",
+    "expect": "23.1.0",
     "file-loader": "1.1.11",
     "html-webpack-plugin": "3.2.0",
     "mini-css-extract-plugin": "0.4.0",
+    "mocha": "5.2.0",
     "nodemon": "1.17.5",
     "style-loader": "0.21.0",
+    "supertest": "3.1.0",
     "uglifyjs-webpack-plugin": "1.2.5",
     "webpack": "4.8.3",
     "webpack-cli": "2.1.3",
