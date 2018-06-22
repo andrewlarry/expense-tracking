@@ -8,6 +8,9 @@ yarn-error.log*
 # Playground
 server/Playground
 
+# Configuration
+server/config
+
 # Runtime data
 pids
 *.pid

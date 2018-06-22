@@ -45,17 +45,12 @@ app.post('/users', (req, res) => {
     email: req.body.email,
     password: req.body.password
   });
-
-  // User.findByToken();
-  // user.generateAuthToken();
-
   user.save().then(() => {
     return user.generateAuthToken();
   }).then(token => {
     res.header('x-auth', token).send(user);
   }).catch(err => res.status(400).send());
 });
-
 
 // Log in an existing user
 app.post('/users/login', (req, res) => {
@@ -70,7 +65,9 @@ app.post('/users/login', (req, res) => {
 });
 
 
-
+/**
+ * Exprense routes
+ */
 
 // Create a new expense
 app.post('/expenses', authenticate, (req, res) => {
@@ -88,21 +85,15 @@ app.post('/expenses', authenticate, (req, res) => {
   }).catch(err => res.status(400).send(err));
 });
 
-
-
-
-
-
-
-// Get all expenses 
+// Get all expenses for a user
 app.get('/expenses', authenticate, (req, res) => {
-  Expense.find().then((expenses) => {
+  Expense.find({ _creator: req.user._id }).then((expenses) => {
     res.send({ expenses });
   }).catch(err => res.status(400).send(err));
 });
 
 // Delete an expense
-app.delete('/expenses/:id', (req, res) => {
+app.delete('/expenses/:id', authenticate, (req, res) => {
   const { id } = req.params;
 
   if (!ObjectID.isValid(id)) {
@@ -116,6 +107,8 @@ app.delete('/expenses/:id', (req, res) => {
     res.send({ expense });
   }).catch(err => res.status(400).send());
 });
+
+
 
 app.listen(port, () => {
   console.log(`Started on port ${port}`);

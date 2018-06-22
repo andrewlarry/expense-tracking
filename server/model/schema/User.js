@@ -56,6 +56,7 @@ UserSchema.methods.toJSON = function() {
   };
 }
 
+// Removes a token from the user document (logout)
 UserSchema.methods.removeToken = function(token) {
   const user = this;
   return user.update({
