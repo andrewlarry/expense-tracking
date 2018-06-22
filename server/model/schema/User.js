@@ -32,6 +32,7 @@ const UserSchema = new Schema({
   }]
 });
 
+// Generate JWT token, update the user.token array, and return save promise 
 UserSchema.methods.generateAuthToken = function() {
   const user = this;
   const access = 'auth';
@@ -44,6 +45,7 @@ UserSchema.methods.generateAuthToken = function() {
   });
 };
 
+// Override toJSON method to reduce the amount of data sent to user
 UserSchema.methods.toJSON = function() {
   const user = this;
   const userObj = user.toObject();
@@ -54,10 +56,20 @@ UserSchema.methods.toJSON = function() {
   };
 }
 
-UserSchema.statics.findByCredentials = function(email, password) {
+UserSchema.methods.removeToken = function(token) {
   const user = this;
+  return user.update({
+    $pull: {
+      tokens: { token }
+    }
+  });
+}
 
-  return user.findOne({ email }).then((user) => {
+// Given an email and password find a user
+UserSchema.statics.findByCredentials = function(email, password) {
+  const User = this;
+
+  return User.findOne({ email }).then((user) => {
     if (!user) {
       return Promise.reject();
     }
@@ -74,8 +86,10 @@ UserSchema.statics.findByCredentials = function(email, password) {
   });
 }
 
+// Given a JWT, decode, and find the user
 UserSchema.statics.findByToken = function(token) {
   const User = this;
+  
   let decoded;
 
   try {
@@ -91,6 +105,7 @@ UserSchema.statics.findByToken = function(token) {
   });
 }
 
+// Use bcrypt to encrypt a password before saving
 UserSchema.pre('save', function(next) {
   const user = this;
 

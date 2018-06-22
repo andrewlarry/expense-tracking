@@ -1,11 +1,11 @@
-const { Schema } = require('mongoose');
+const mongoose = require('mongoose');
 
 const months = [
   'Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul',
   'Aug', 'Sept', 'Oct', 'Nov', 'Dec'
 ];
 
-const ExpenseSchema = new Schema({
+const ExpenseSchema = new mongoose.Schema({
   description: String,
   category: {
     type: String,
@@ -26,6 +26,10 @@ const ExpenseSchema = new Schema({
     min: [2018, 'Can only plan for this year and above.'],
     max: 2118,
     required: true
+  },
+  _creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
   }
 });
 

@@ -22,6 +22,23 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/public/index.html'));
 });
 
+/**
+ * User routes
+ */
+
+ // Get your user credentials if you have a valid JWT
+app.get('/users/me', authenticate, (req, res) => {
+  res.send(req.user);
+});
+
+// Log a user out
+app.delete('/users/me/token', authenticate, (req, res) => {
+  req.user.removeToken(req.token).then(() => {
+    res.status(200).send()
+  })
+  .catch(() => res.status(400).send());
+})
+
 // Create a new user
 app.post('/users', (req, res) => {
   const user = new User({
@@ -40,7 +57,7 @@ app.post('/users', (req, res) => {
 });
 
 
-// Log in user
+// Log in an existing user
 app.post('/users/login', (req, res) => {
   const { email, password } = req.body;
   
@@ -53,14 +70,17 @@ app.post('/users/login', (req, res) => {
 });
 
 
+
+
 // Create a new expense
-app.post('/expenses', (req, res) => {
+app.post('/expenses', authenticate, (req, res) => {
   const expense = new Expense({
     description: req.body.description,
     category: req.body.category,
     amount: req.body.amount,
     month: req.body.month,
-    year: req.body.year
+    year: req.body.year,
+    _creator: req.user._id
   });
 
   expense.save().then((doc) => {
@@ -71,14 +91,11 @@ app.post('/expenses', (req, res) => {
 
 
 
-app.get('/users/me', authenticate, (req, res) => {
-  res.send(req.user);
-});
 
 
 
 // Get all expenses 
-app.get('/expenses', (req, res) => {
+app.get('/expenses', authenticate, (req, res) => {
   Expense.find().then((expenses) => {
     res.send({ expenses });
   }).catch(err => res.status(400).send(err));

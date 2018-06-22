@@ -27,7 +27,8 @@ const expenses = [{
     category: 'Testing',
     amount: 500,
     month: 'Aug',
-    year: 2018
+    year: 2018,
+    _creator: user1Id
   },
   {
     _id: new ObjectID(),
@@ -35,7 +36,8 @@ const expenses = [{
     category: 'Fishing',
     amount: 1000,
     month: 'Sept',
-    year: 2018
+    year: 2018,
+    _creator: user2Id
 }];
 
 const populateExpenses = (done) => {
