@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
+const path = require('path');
 
 const { mongoose } = require('./db');
 const { User, Expense } = require('./model');
@@ -10,6 +11,14 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../client/public')));
+
+// Serve React homepage
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/public/index.html'));
+});
 
 // Create a new user
 app.post('/users', (req, res) => {
