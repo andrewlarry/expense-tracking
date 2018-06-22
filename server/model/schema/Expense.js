@@ -5,7 +5,7 @@ const months = [
   'Aug', 'Sept', 'Oct', 'Nov', 'Dec'
 ];
 
-const expenseSchema = new Schema({
+const ExpenseSchema = new Schema({
   description: String,
   category: {
     type: String,
@@ -29,4 +29,4 @@ const expenseSchema = new Schema({
   }
 });
 
-module.exports = expenseSchema;
+module.exports = ExpenseSchema;

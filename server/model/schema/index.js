@@ -1,4 +1,4 @@
-const userSchema = require('./User');
-const expenseSchema = require('./Expense');
+const UserSchema = require('./User');
+const ExpenseSchema = require('./Expense');
 
-module.exports = { userSchema, expenseSchema };
+module.exports = { UserSchema, ExpenseSchema };

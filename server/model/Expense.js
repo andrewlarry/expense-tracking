@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const { expenseSchema } = require('./schema');
+const { ExpenseSchema } = require('./schema');
 
-const Expense = mongoose.model('Expense', expenseSchema);
+const Expense = mongoose.model('Expense', ExpenseSchema);
 
 module.exports = Expense;
