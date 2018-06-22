@@ -1,3 +1,5 @@
+require('./config/config');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
@@ -10,7 +12,6 @@ const { authenticate } = require('./middleware');
 
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
@@ -108,10 +109,8 @@ app.delete('/expenses/:id', authenticate, (req, res) => {
   }).catch(err => res.status(400).send());
 });
 
-
-
-app.listen(port, () => {
-  console.log(`Started on port ${port}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Started on port ${process.env.PORT}`);
 });
 
 module.exports = { app };
