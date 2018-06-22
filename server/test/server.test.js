@@ -4,31 +4,10 @@ const { ObjectID } = require('mongodb');
 
 const { app } = require('../server');
 const { Expense } = require('../model');
+const { users, populateUsers, expenses, populateExpenses } = require('./seed/seed');
 
-const expenses = [
-  {
-    _id: new ObjectID(),
-    description: 'Route testing 1.',
-    category: 'Testing',
-    amount: 500,
-    month: 'Aug',
-    year: 2018
-  },
-  {
-    _id: new ObjectID(),
-    description: 'Route testing 2.',
-    category: 'Fishing',
-    amount: 1000,
-    month: 'Sept',
-    year: 2018
-  },
-];
-
-beforeEach((done) => {
-  Expense.remove({}).then(() => {
-    return Expense.insertMany(expenses);
-  }).then(() => done());
-});
+beforeEach(populateUsers);
+beforeEach(populateExpenses);
 
 describe('POST /expenses', () => {
   it('should create a new expense', (done) => {

@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
 const path = require('path');
+const bcrypt = require('bcryptjs');
 
 const { mongoose } = require('./db');
 const { User, Expense } = require('./model');
@@ -37,6 +38,20 @@ app.post('/users', (req, res) => {
     res.header('x-auth', token).send(user);
   }).catch(err => res.status(400).send());
 });
+
+
+// Log in user
+app.post('/users/login', (req, res) => {
+  const { email, password } = req.body;
+  
+  User.findByCredentials(email, password).then((user) => {
+    user.generateAuthToken().then((token) => {
+      res.header('x-auth', token).send(user);
+    });
+  }).catch(err => res.status(400).send());
+
+});
+
 
 // Create a new expense
 app.post('/expenses', (req, res) => {
