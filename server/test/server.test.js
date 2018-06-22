@@ -1,11 +1,13 @@
 const expect = require('expect');
 const request = require('supertest');
+const { ObjectID } = require('mongodb');
 
 const { app } = require('../server');
 const { Expense } = require('../model');
 
 const expenses = [
   {
+    _id: new ObjectID(),
     description: 'Route testing 1.',
     category: 'Testing',
     amount: 500,
@@ -13,6 +15,7 @@ const expenses = [
     year: 2018
   },
   {
+    _id: new ObjectID(),
     description: 'Route testing 2.',
     category: 'Fishing',
     amount: 1000,
@@ -88,6 +91,46 @@ describe('GET /expenses', () => {
       .expect((res) => {
         expect(res.body.expenses.length).toBe(2);
       })
+      .end(done);
+  });
+});
+
+describe('DELETE /expenses', () => {
+  it('should remove an expense', (done) => {
+    const hexId = expenses[1]._id.toHexString();
+
+    request(app)
+      .delete(`/expenses/${hexId}`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.expense._id).toBe(hexId);
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+
+        Expense.findById(hexId).then((expense) => {
+          expect(expense).toBe(null);
+          done();
+        }).catch(err => done(err));
+      })
+
+  });
+
+  it('should return 404 if expense not found', (done) => {
+    const hexId = new ObjectID().toHexString();
+
+    request(app)
+      .delete(`/expenses/${hexId}`)
+      .expect(404)
+      .end(done);
+  });
+
+  it('should return 404 if object id is invalid', (done) => {
+    request(app)
+      .delete(`/expenses/781728fff`)
+      .expect(404)
       .end(done);
   });
 });

@@ -46,7 +46,7 @@ app.delete('/expenses/:id', (req, res) => {
     if (!expense) {
       return res.status(404).send();
     }
-    res.send(expense);
+    res.send({ expense });
   }).catch((err) => {
     res.status(400).send();
   });
