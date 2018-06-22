@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const Feed () => (
+const Feed = () => (
   <h1>Feed</h1>
 );
 

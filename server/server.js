@@ -5,6 +5,7 @@ const path = require('path');
 
 const { mongoose } = require('./db');
 const { User, Expense } = require('./model');
+const { authenticate } = require('./middleware');
 
 
 const app = express();
@@ -51,6 +52,15 @@ app.post('/expenses', (req, res) => {
     res.send(doc);
   }).catch(err => res.status(400).send(err));
 });
+
+
+
+
+app.get('/users/me', authenticate, (req, res) => {
+  res.send(req.user);
+});
+
+
 
 // Get all expenses 
 app.get('/expenses', (req, res) => {
