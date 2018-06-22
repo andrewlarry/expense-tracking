@@ -1,7 +1,7 @@
 {
-  "name": "tweetgame",
+  "name": "expense-tracking",
   "version": "1.0.0",
-  "description": "Twitter game.",
+  "description": "Expense tracking application.",
   "main": "client/src/index.js",
   "scripts": {
     "build:dev": "webpack --env dev --progress",
@@ -11,6 +11,9 @@
     "test-watch": "nodemon --exec 'npm test'",
     "start": "node server/server.js",
     "start:dev": "nodemon server/server.js"
+  },
+  "engines": {
+    "node": "v10.1.0"
   },
   "author": "Andrew Fuselier",
   "license": "MIT",
