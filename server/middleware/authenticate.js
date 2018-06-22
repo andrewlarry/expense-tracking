@@ -1,5 +1,4 @@
 const User = require('../model/User');
-console.log(User.schema);
 
 const authenticate = (req, res, next) => {
    const token = req.header('x-auth');
