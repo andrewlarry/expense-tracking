@@ -40,7 +40,7 @@ module.exports = {
 	devtool: 'inline-source-map',
 	devServer: {
 		contentBase: './client/public',
-		hot: true,
+		hot: true
 	},
 	mode: 'development'
 };

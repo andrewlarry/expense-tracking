@@ -42,6 +42,7 @@ app.delete('/users/me/token', authenticate, (req, res) => {
 
 // Create a new user
 app.post('/users', (req, res) => {
+  console.log(req.body);
   const user = new User({
     email: req.body.email,
     password: req.body.password
@@ -49,6 +50,7 @@ app.post('/users', (req, res) => {
   user.save().then(() => {
     return user.generateAuthToken();
   }).then(token => {
+    console.log(token);
     res.header('x-auth', token).send(user);
   }).catch(err => res.status(400).send());
 });
@@ -107,6 +109,11 @@ app.delete('/expenses/:id', authenticate, (req, res) => {
     }
     res.send({ expense });
   }).catch(err => res.status(400).send());
+});
+
+// Serve React homepage
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/public/index.html'));
 });
 
 app.listen(process.env.PORT, () => {
